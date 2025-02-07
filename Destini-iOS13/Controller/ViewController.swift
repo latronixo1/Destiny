@@ -19,15 +19,37 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        storyLabel.text = storyBrain.stories[1].title
-        choice1Button.setTitle(storyBrain.stories[1].choice1, for: .normal)
-        choice2Button.setTitle(storyBrain.stories[1].choice2, for: .normal)
-        
+        updateUI()
     }
 
+    //нажатие кнопки
     @IBAction func choiseMade(_ sender: UIButton) {
+        //Проверка ответа пользовалеля
+        let userAnswer: String
+        
+        //безопасно извлекаем текст кнопки
+        if let buttonPressed = sender.titleLabel?.text {
+            userAnswer = buttonPressed
+        } else {
+            print("нажата неверная кнопка")
+            return
+        }
+        
+        //отправляем ответ пользователя в мозг
+        storyBrain.checkAnswer(userAnswer)
+        
+        //отображаем новую историю
+        updateUI()
     }
     
-    func updateUI()
+    //отображение новой истории
+    func updateUI() {
+        let nextStory = storyBrain.getNextStory()
+        
+        storyLabel.text = nextStory[0]
+        choice1Button.setTitle(nextStory[1], for: .normal)
+        choice2Button.setTitle(nextStory[2], for: .normal)
+
+    }
 }
 
